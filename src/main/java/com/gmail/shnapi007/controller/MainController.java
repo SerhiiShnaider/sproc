@@ -1,8 +1,10 @@
 package com.gmail.shnapi007.controller;
 
 import com.gmail.shnapi007.entity.User;
+import com.gmail.shnapi007.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class MainController {
+
+  @Autowired
+  private UserService userService;
 
   private static List<User> users = new ArrayList<>();
 
@@ -52,15 +57,14 @@ public class MainController {
   }
 
   @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
-  public String savePerson(Model model, @ModelAttribute("userForm") User user) {
+  public String addUser(Model model, @ModelAttribute("userForm") User user) {
 
     String firstName = user.getFirstName();
     String lastName = user.getLastName();
 
     if (firstName != null && firstName.length() > 0 && lastName != null && lastName.length() > 0) {
-      User newUser = new User(firstName, lastName);
-      users.add(newUser);
 
+      userService.addUser(new User(firstName, lastName));
       return "redirect:/userList";
     }
 

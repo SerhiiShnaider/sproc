@@ -1,6 +1,7 @@
 package com.gmail.shnapi007.entity;
 
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 import javax.persistence.GeneratedValue;
@@ -15,12 +16,15 @@ public class User {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", unique = true)
   private Long id;
 
   @NotBlank
+  @Column(name = "firstName")
   private String firstName;
 
   @NotBlank
+  @Column(name = "lastName")
   private String lastName;
 
   public User() {
