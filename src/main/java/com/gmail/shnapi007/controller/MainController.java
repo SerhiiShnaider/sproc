@@ -43,7 +43,6 @@ public class MainController {
   public String userList(Model model) {
 
     model.addAttribute("users", users);
-
     return "userList";
   }
 
@@ -59,17 +58,16 @@ public class MainController {
   @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
   public String addUser(Model model, @ModelAttribute("userForm") User user) {
 
-    String firstName = user.getFirstName();
-    String lastName = user.getLastName();
+    String username = user.getUsername();
+    String userPassword = user.getPassword();
 
-    if (firstName != null && firstName.length() > 0 && lastName != null && lastName.length() > 0) {
+    if (username != null && username.length() > 0 && userPassword != null && userPassword.length() > 0) {
 
-      userService.addUser(new User(firstName, lastName));
+      userService.addUser(new User(username, userPassword));
       return "redirect:/userList";
     }
 
     model.addAttribute("errorMessage", errorMessage);
     return "addUser";
   }
-
 }

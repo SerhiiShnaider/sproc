@@ -6,19 +6,15 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
+<div th:include="header::head"></div>
 <h1>Welcome</h1>
 <h2 th:utext="${message}">..!..</h2>
 
-<!--
-
-   In Thymeleaf the equivalent of
-   JSP's ${pageContext.request.contextPath}/edit.html
-   would be @{/edit.html}
-
-   -->
 
 <a href="userList">User List</a>
 
+
+<div th:include="footer::foot"></div>
 </body>
 
 </html>

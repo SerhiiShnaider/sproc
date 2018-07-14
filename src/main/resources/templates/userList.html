@@ -6,6 +6,8 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
+<div th:include="header::head"></div>
+
 <h1>User List</h1>
 <a href="addUser">Add User</a>
 <br/><br/>
@@ -16,10 +18,12 @@
       <th>Last Name</th>
     </tr>
     <tr th:each ="user : ${users}">
-      <td th:utext="${user.firstName}">...</td>
-      <td th:utext="${user.lastName}">...</td>
+      <td th:utext="${user.username}">...</td>
+      <td th:utext="${user.password}">...</td>
     </tr>
   </table>
 </div>
+
+<div th:include="footer::foot"></div>
 </body>
 </html>
