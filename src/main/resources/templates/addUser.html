@@ -9,19 +9,23 @@
 <div th:include="header::head"></div>
 
 <h1>Create a User:</h1>
-<form th:action="@{/addUser}"
-      th:object="${userForm}" method="POST">
+
+<form th:action="@{/addUser}" method="POST">
   User name:
-  <input type="text" th:field="*{username}" />
+  <input type="text" name="username" placeholder="username"/>
   <br/>
   Password:
-  <input type="text" th:field="*{password}" />
+  <input type="text" name="password" placeholder="password" />
   <br/>
   <input type="submit" value="Create" />
+  <input type="hidden"
+         name="${_csrf.parameterName}"
+         value="${_csrf.token}"/>
 
-  <div th:include="footer::foot"></div>
 </form>
 
+
+<div th:include="footer::foot"></div>
 <br/>
 
 <!-- Check if errorMessage is not null and not empty -->

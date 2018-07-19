@@ -1,6 +1,5 @@
 package com.gmail.shnapi007.config;
 
-import com.gmail.shnapi007.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,9 +10,11 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.authentication.configurers.provisioning.InMemoryUserDetailsManagerConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 @Configuration
 @ComponentScan("com.gmail.shnapi007")
@@ -29,34 +30,53 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public DaoAuthenticationProvider authenticationProvider() {
-    DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-    provider.setUserDetailsService(userDetailsService);
-    provider.setPasswordEncoder(passwordEncoder());
-    return provider;
-  }
+    DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
+    authenticationProvider.setUserDetailsService(userDetailsService);
+    authenticationProvider.setPasswordEncoder(passwordEncoder());
 
+    return authenticationProvider;
+  }
+/*
   public InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> inMemory() {
-    return new InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder>();
+    return new InMemoryUserDetailsManagerConfigurer<>();
   }
 
   @Autowired
-  public void configureInMemory(AuthenticationManagerBuilder auth)
+  public void configureImMemory(AuthenticationManagerBuilder auth, AuthenticationProvider provider)
       throws Exception {
-    auth
-        .inMemoryAuthentication()
-        .withUser("user")
-        .password("user")
-        .roles("USER");
+    inMemory()
+        .withUser("adm")
+        .password("adm")
+        .authorities("ROLE_ADMIN")
+        .and()
+        .configure(auth);
+
+    auth.authenticationProvider(provider);
+ }*/
+
+  @Bean
+  public UserDetailsService userDetailsService() {
+    InMemoryUserDetailsManager userDetailsManager = new InMemoryUserDetailsManager();
+    userDetailsManager.createUser(
+        User.withUsername("adm")
+            .password("adm")
+            .authorities("ADMIN")
+            .build());
+    return userDetailsManager;
   }
 
   @Override
-  protected void configure(HttpSecurity httpSecurity) throws Exception {
-    httpSecurity
+  protected void configure(HttpSecurity http) throws Exception {
+    http
         .authorizeRequests()
         .antMatchers("/").permitAll()
-        .antMatchers("/userList").permitAll()
         .antMatchers("/admin/**").access("hasRole('ADMIN')")
         .and()
-        .formLogin();
-  }
+        .formLogin()
+        /*.loginPage("/xxx")
+        .usernameParameter("xUserName")
+        .passwordParameter("xUserPassword")
+        .loginProcessingUrl("/xLogin")*/
+        .and()
+        .csrf();  }
 }

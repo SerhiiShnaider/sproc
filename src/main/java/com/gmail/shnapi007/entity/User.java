@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -31,60 +30,92 @@ public class User implements UserDetails {
   @NotBlank
   private String password;
 
-  private Role role = Role.ROLE_USER;
-
   private boolean accountNonExpired = true;
 
   private boolean accountNonLocked = true;
 
   private boolean credentialsNonExpired = true;
 
-  private boolean enabled;
+  private boolean enabled = true;
+
+  private Role role = Role.ROLE_USER;
 
   public User() {
-
   }
 
-  public User(String username, String password) {
+  public User(@NotBlank String username, @NotBlank String password) {
     this.username = username;
     this.password = password;
   }
 
   @Override
   public Collection<? extends GrantedAuthority> getAuthorities() {
+
     ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();
-    authorities.add(new SimpleGrantedAuthority(this.role.name()));
+    authorities.add(new SimpleGrantedAuthority(role.toString()));
     return authorities;
   }
 
   @Override
   public String getPassword() {
-    return this.password;
+    return password;
   }
 
   @Override
   public String getUsername() {
-    return this.username;
+    return username;
   }
 
   @Override
   public boolean isAccountNonExpired() {
-    return this.accountNonExpired;
+    return accountNonExpired;
   }
 
   @Override
   public boolean isAccountNonLocked() {
-    return this.accountNonLocked;
+    return accountNonLocked;
   }
 
   @Override
   public boolean isCredentialsNonExpired() {
-    return this.credentialsNonExpired;
+    return credentialsNonExpired;
   }
 
   @Override
   public boolean isEnabled() {
-    return this.enabled;
+    return enabled;
+  }
+
+  public void setId(Long id) {
+    this.id = id;
+  }
+
+  public void setUsername(String username) {
+    this.username = username;
+  }
+
+  public void setPassword(String password) {
+    this.password = password;
+  }
+
+  public void setAccountNonExpired(boolean accountNonExpired) {
+    this.accountNonExpired = accountNonExpired;
+  }
+
+  public void setAccountNonLocked(boolean accountNonLocked) {
+    this.accountNonLocked = accountNonLocked;
+  }
+
+  public void setCredentialsNonExpired(boolean credentialsNonExpired) {
+    this.credentialsNonExpired = credentialsNonExpired;
+  }
+
+  public void setEnabled(boolean enabled) {
+    this.enabled = enabled;
+  }
+
+  public void setRole(Role role) {
+    this.role = role;
   }
 
   @Override
@@ -93,11 +124,11 @@ public class User implements UserDetails {
         .add("id", id)
         .add("username", username)
         .add("password", password)
-        .add("role", role)
         .add("accountNonExpired", accountNonExpired)
         .add("accountNonLocked", accountNonLocked)
         .add("credentialsNonExpired", credentialsNonExpired)
         .add("enabled", enabled)
+        .add("role", role)
         .toString();
   }
 }

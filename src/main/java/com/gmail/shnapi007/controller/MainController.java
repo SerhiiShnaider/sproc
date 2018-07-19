@@ -6,11 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class MainController {
@@ -18,12 +21,8 @@ public class MainController {
   @Autowired
   private UserService userService;
 
-  private static List<User> users = new ArrayList<>();
-
-  static {
-    users.add(new User("Bill", "Gates"));
-    users.add(new User("Steve", "Jobs"));
-  }
+  @Autowired
+  private PasswordEncoder passwordEncoder;
 
   // Inject via application.properties
   @Value("${welcome.message}")
@@ -39,13 +38,6 @@ public class MainController {
     return "index";
   }
 
-  @RequestMapping(value = {"/userList"}, method = RequestMethod.GET)
-  public String userList(Model model) {
-
-    model.addAttribute("users", users);
-    return "userList";
-  }
-
   @RequestMapping(value = {"/addUser"}, method = RequestMethod.GET)
   public String showAddPersonPage(Model model) {
 
@@ -56,18 +48,19 @@ public class MainController {
   }
 
   @RequestMapping(value = {"/addUser"}, method = RequestMethod.POST)
-  public String addUser(Model model, @ModelAttribute("userForm") User user) {
+  public String addUser(Model model, @RequestParam String username, @RequestParam String password) {
 
-    String username = user.getUsername();
-    String userPassword = user.getPassword();
-
-    if (username != null && username.length() > 0 && userPassword != null && userPassword.length() > 0) {
-
-      userService.addUser(new User(username, userPassword));
-      return "redirect:/userList";
+    if (username != null && username.length() > 0 && password != null && password.length() > 0) {
+      userService.addUser(new User(username, passwordEncoder.encode(password)));
+      return "redirect:/xxx";
     }
 
     model.addAttribute("errorMessage", errorMessage);
     return "addUser";
+  }
+
+  @GetMapping("/xxx")
+  public String login() {
+    return "login";
   }
 }
