@@ -36,7 +36,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     return authenticationProvider;
   }
-/*
+
   public InMemoryUserDetailsManagerConfigurer<AuthenticationManagerBuilder> inMemory() {
     return new InMemoryUserDetailsManagerConfigurer<>();
   }
@@ -52,7 +52,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .configure(auth);
 
     auth.authenticationProvider(provider);
- }*/
+ }
 
   @Bean
   public UserDetailsService userDetailsService() {
@@ -73,10 +73,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/admin/**").access("hasRole('ADMIN')")
         .and()
         .formLogin()
-        /*.loginPage("/xxx")
+        .loginPage("/header")
         .usernameParameter("xUserName")
         .passwordParameter("xUserPassword")
-        .loginProcessingUrl("/xLogin")*/
+        .loginProcessingUrl("/login")
+        .and()
+        .rememberMe()
+        .key("uniqueAndSecret")
+        .rememberMeCookieName("onlm-remember-me")
+        .tokenValiditySeconds(24 * 60 * 60)
+        .and()
+        .logout()
+        .deleteCookies("ONLM_SESSION_ID")
+        .permitAll()
+        .logoutUrl("/logout")
+        .logoutSuccessUrl("/")
         .and()
         .csrf();  }
 }

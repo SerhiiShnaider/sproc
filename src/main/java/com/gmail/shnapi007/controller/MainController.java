@@ -52,7 +52,7 @@ public class MainController {
 
     if (username != null && username.length() > 0 && password != null && password.length() > 0) {
       userService.addUser(new User(username, passwordEncoder.encode(password)));
-      return "redirect:/xxx";
+      return "redirect:/";
     }
 
     model.addAttribute("errorMessage", errorMessage);

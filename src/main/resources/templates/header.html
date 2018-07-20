@@ -1,10 +1,26 @@
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity4">
 <body>
 <div th:fragment="head">
-  <h1>H E A D E R</h1>
 
+  <form th:action="@{/login}" method="post" sec:authorize="isAnonymous()">
+    <input type="" name="xUserName" placeholder="username"/>
+    <input type="" name="xUserPassword" placeholder="password"/>
+    remember me
+    <input type="checkbox" name="remember-me" />
+    <input type="submit" value="Login"/>
+    <input type="hidden"
+           name="${_csrf.parameterName}"
+           value="${_csrf.token}"/>
+  </form>
 
-  <a href="/xxx">to login</a>
+  <form th:action="@{/logout}" method="POST" sec:authorize="isAuthenticated()">
+    <input type="submit" value="Logout"/>
+    <input type="hidden"
+           name="${_csrf.parameterName}"
+           value="${_csrf.token}"/>
+  </form>
+
 </div>
 </body>
 </html>
