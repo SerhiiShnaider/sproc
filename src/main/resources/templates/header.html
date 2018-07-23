@@ -14,6 +14,9 @@
            value="${_csrf.token}"/>
   </form>
 
+  <br/>
+  <a href="forgotPassword">forgot password?</a>
+
   <form th:action="@{/logout}" method="POST" sec:authorize="isAuthenticated()">
     <input type="submit" value="Logout"/>
     <input type="hidden"
@@ -22,10 +25,10 @@
   </form>
 
   <br/>
-  <br/>
-
   <a href="registration">Registration</a>
 
 </div>
+
 </body>
+
 </html>

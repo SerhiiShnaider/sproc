@@ -31,6 +31,10 @@ public class User implements UserDetails {
   private String username;
 
   @NotBlank
+  @Column(unique = true)
+  private String email;
+
+  @NotBlank
   private String password;
 
   private boolean accountNonExpired = true;
@@ -39,7 +43,7 @@ public class User implements UserDetails {
 
   private boolean credentialsNonExpired = true;
 
-  private boolean enabled = true;
+  private boolean enabled = false;
 
   @Enumerated(EnumType.STRING)
   private Role role = Role.ROLE_USER;
@@ -47,9 +51,10 @@ public class User implements UserDetails {
   public User() {
   }
 
-  public User(@NotBlank String username, @NotBlank String password) {
+  public User(@NotBlank String username, @NotBlank String password, @NotBlank String email) {
     this.username = username;
     this.password = password;
+    this.email = email;
   }
 
   @Override
@@ -63,6 +68,10 @@ public class User implements UserDetails {
   @Override
   public String getPassword() {
     return password;
+  }
+
+  public String getEmail() {
+    return email;
   }
 
   @Override
@@ -88,10 +97,6 @@ public class User implements UserDetails {
   @Override
   public boolean isEnabled() {
     return enabled;
-  }
-
-  public void setId(Long id) {
-    this.id = id;
   }
 
   public void setUsername(String username) {
@@ -122,11 +127,16 @@ public class User implements UserDetails {
     this.role = role;
   }
 
+  public void setEmail(String email) {
+    this.email = email;
+  }
+
   @Override
   public String toString() {
     return MoreObjects.toStringHelper(this)
         .add("id", id)
         .add("username", username)
+        .add("email", email)
         .add("password", password)
         .add("accountNonExpired", accountNonExpired)
         .add("accountNonLocked", accountNonLocked)

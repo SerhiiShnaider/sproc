@@ -1,8 +1,8 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8" />
-  <title>Add User</title>
+  <meta charset="UTF-8"/>
+  <title>Registration</title>
   <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
 <body>
@@ -14,14 +14,17 @@
   User name:
   <input type="text" name="username" placeholder="username"/>
   <br/>
-  Password:
-  <input type="text" name="password" placeholder="password" />
+  Email:
+  <input type="email" name="email" placeholder="email"/>
   <br/>
-  <input type="submit" value="Create" />
+  Password:
+  <input type="text" name="password" placeholder="password"/>
+  <br/>
+
+  <input type="submit" value="Create"/>
   <input type="hidden"
          name="${_csrf.parameterName}"
          value="${_csrf.token}"/>
-
 </form>
 
 
@@ -32,7 +35,6 @@
 
 <div th:if="${errorMessage}" th:utext="${errorMessage}"
      style="color:red;font-style:italic;">
-  ...
 </div>
 
 </body>
