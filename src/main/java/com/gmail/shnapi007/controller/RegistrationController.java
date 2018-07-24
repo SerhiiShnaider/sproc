@@ -32,6 +32,7 @@ public class RegistrationController extends MainController {
   @PostMapping(value = {"/registration"})
   public String addUser(Model model, @RequestParam String username, @RequestParam String password,
       @RequestParam String email, WebRequest request) {
+
     if (username != null && username.length() > 0 && password != null && password.length() > 0 &&
         email != null && email.length() > 0) {
 
@@ -46,34 +47,55 @@ public class RegistrationController extends MainController {
     return "registration";
   }
 
-  @RequestMapping(value = "/regitrationConfirm", method = RequestMethod.GET)
-  public String confirmRegistration(Model model, @RequestParam("token") String token) {
+  @RequestMapping(value = "/registrationConfirm", method = RequestMethod.GET)
+  public String confirmRegistration(Model model, @RequestParam("token") String tokenValue) {
 
-    Token registrationToken = tokenService.getToken(token);
-    if (registrationToken == null) {
+    Token token = tokenService.getToken(tokenValue);
+
+    if (token == null) {
       String message = "Invalid token";
       model.addAttribute("message", message);
       return "redirect:/badUser";
     }
 
-    User user = registrationToken.getUser();
+    User user = token.getUser();
     LocalDateTime now = LocalDateTime.now();
 
-    if (registrationToken.isWasUsed()) {
+    if (token.isWasUsed()) {
       String messageValue = "Token was used";
       model.addAttribute("message", messageValue);
       return "redirect:/badUser";
     }
 
-    if (registrationToken.getExpiryDate().isBefore(now)) {
+    if (token.getExpiryDate().isBefore(now)) {
       String messageValue = "Token expired";
       model.addAttribute("message", messageValue);
       return "redirect:/badUser";
     }
 
     user.setEnabled(true);
-    registrationToken.setWasUsed(true);
+    token.setWasUsed(true);
     userService.updateUser(user);
     return "redirect:/";
   }
+
+  @GetMapping(value = "/resetConfirmation")
+  public String resetConfirmation(Model model) {
+    return "resetConfirmation";
+  }
+
+  @PostMapping(value = "/resetConfirmation")
+  public String resetConfirmation(Model model, @RequestParam String username) {
+
+    if (username != null && username.length() > 0) {
+      User user = (User) userService.loadUserByUsername(username);
+      if (user != null) {
+        eventPublisher.publishEvent(new RegistrationCompleteEvent(user));
+        return "redirect:/";
+      }
+    }
+    model.addAttribute("errorMessage", "Wrong login");
+    return "resetConfirmation";
+  }
+
 }

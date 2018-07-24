@@ -38,14 +38,13 @@ public class ResetPasswordController extends MainController {
   public String resetPassword(Model model, @RequestParam("token") String token) {
 
     Token registrationToken = tokenService.getToken(token);
+    LocalDateTime now = LocalDateTime.now();
+
     if (registrationToken == null) {
       String message = "Invalid token";
       model.addAttribute("message", message);
       return "redirect:/badUser";
     }
-
-    User user = registrationToken.getUser();
-    LocalDateTime now = LocalDateTime.now();
 
     if (registrationToken.isWasUsed()) {
       String messageValue = "Token was used";

@@ -9,7 +9,7 @@ public interface TokenService {
 
   Token getToken(String VerificationToken);
 
-  Token getTokenByUser(User user);
+  Token getToken(User user);
 
   void updateToken(Token Token);
 

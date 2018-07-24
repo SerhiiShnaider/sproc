@@ -1,5 +1,6 @@
 package com.gmail.shnapi007.listener;
 
+import com.gmail.shnapi007.entity.Token;
 import com.gmail.shnapi007.entity.User;
 import com.gmail.shnapi007.event.RegistrationCompleteEvent;
 import java.util.UUID;
@@ -18,12 +19,19 @@ public class RegistrationListener extends Listener implements
 
   private void confirmRegistration(RegistrationCompleteEvent event) {
     User user = event.getUser();
-    String token = UUID.randomUUID().toString() + UUID.randomUUID().toString();
-    tokenService.createToken(user, token);
+    String key = UUID.randomUUID().toString() + UUID.randomUUID().toString();
+    Token token = tokenService.getToken(user);
+
+    if (token == null) {
+      tokenService.createToken(user, key);
+    } else {
+      token.setToken(key);
+      tokenService.updateToken(token);
+    }
 
     String recipientAddress = user.getEmail();
     String subject = "Registration Confirmation";
-    String url = "/registrationConfirm.html?token=" + token;
+    String url = "/registrationConfirm.html?token=" + key;
     String message = "Url: ";
 
     SimpleMailMessage email = new SimpleMailMessage();

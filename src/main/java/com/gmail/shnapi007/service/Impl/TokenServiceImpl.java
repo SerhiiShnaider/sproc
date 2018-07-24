@@ -25,7 +25,7 @@ public class TokenServiceImpl implements TokenService {
   }
 
   @Override
-  public Token getTokenByUser(User user) {
+  public Token getToken(User user) {
     return tokenDao.findByUser(user);
   }
 
