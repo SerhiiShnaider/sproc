@@ -92,7 +92,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         .logoutUrl("/logout")
         .logoutSuccessUrl("/")
 
+        // this part for correct working h2 db end csrf
         .and()
-        .csrf();
+        .headers().frameOptions().disable()
+        .and()
+        .csrf().ignoringAntMatchers("/h2/**")
+        .and()
+        .cors().disable();
   }
 }

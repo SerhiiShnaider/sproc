@@ -32,7 +32,7 @@ public class ResetPasswordListener extends Listener implements
     SimpleMailMessage email = new SimpleMailMessage();
     email.setTo(recipientAddress);
     email.setSubject(subject);
-    email.setText(message + "http://localhost:8080" + url);
+    email.setText(message + env.getProperty("app.host") + env.getProperty("server.port") + url);
     mailSender.send(email);
   }
 

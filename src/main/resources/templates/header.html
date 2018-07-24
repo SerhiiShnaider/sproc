@@ -3,19 +3,31 @@
 <body>
 <div th:fragment="head">
 
-  <form th:action="@{/login}" method="post" sec:authorize="isAnonymous()">
-    <input type="" name="xUserName" placeholder="username"/>
-    <input type="" name="xUserPassword" placeholder="password"/>
-    remember me
-    <input type="checkbox" name="remember-me" />
-    <input type="submit" value="Login"/>
-    <input type="hidden"
-           name="${_csrf.parameterName}"
-           value="${_csrf.token}"/>
-  </form>
 
-  <br/>
-  <a href="forgotPassword">forgot password?</a>
+  <div sec:authorize="isAnonymous()">
+    <form th:action="@{/login}" method="post">
+
+      <input type="" name="xUserName" placeholder="username"/>
+
+      <input type="" name="xUserPassword" placeholder="password"/>
+      remember me
+
+      <input type="checkbox" name="remember-me"/>
+
+      <input type="submit" value="Login"/>
+
+      <input type="hidden"
+             name="${_csrf.parameterName}"
+             value="${_csrf.token}"/>
+    </form>
+
+    <br/>
+    <a href="forgotPassword">forgot password?</a>
+
+    <br/>
+    <a href="registration">Registration</a>
+
+  </div>
 
   <form th:action="@{/logout}" method="POST" sec:authorize="isAuthenticated()">
     <input type="submit" value="Logout"/>
@@ -24,8 +36,6 @@
            value="${_csrf.token}"/>
   </form>
 
-  <br/>
-  <a href="registration">Registration</a>
 
 </div>
 
