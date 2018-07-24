@@ -23,7 +23,7 @@ public class RegistrationListener extends Listener implements
 
     String recipientAddress = user.getEmail();
     String subject = "Registration Confirmation";
-    String url = "/regitrationConfirm.html?token=" + token;
+    String url = "/registrationConfirm.html?token=" + token;
     String message = "Url: ";
 
     SimpleMailMessage email = new SimpleMailMessage();

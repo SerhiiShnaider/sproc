@@ -20,9 +20,7 @@ public class ResetPasswordListener extends Listener implements
   private void resetPassword(ResetPasswordEvent event) {
     User user = event.getUser();
     String key = UUID.randomUUID().toString() + UUID.randomUUID().toString();
-
     Token token = tokenService.getTokenByUser(user);
-    updateToken(token, key);
 
     String recipientAddress = user.getEmail();
     String subject = "Reset password";
@@ -32,7 +30,12 @@ public class ResetPasswordListener extends Listener implements
     SimpleMailMessage email = new SimpleMailMessage();
     email.setTo(recipientAddress);
     email.setSubject(subject);
-    email.setText(message + env.getProperty("app.host") + env.getProperty("server.port") + url);
+    if (!user.isEnabled()) {
+      email.setText("Firstly confirm your account");
+    } else {
+      updateToken(token, key);
+      email.setText(message + env.getProperty("app.host") + env.getProperty("server.port") + url);
+    }
     mailSender.send(email);
   }
 
