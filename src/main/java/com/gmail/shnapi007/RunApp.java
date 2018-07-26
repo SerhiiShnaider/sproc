@@ -1,7 +1,15 @@
 package com.gmail.shnapi007;
 
+import com.gmail.shnapi007.dao.CountryDao;
+import com.gmail.shnapi007.entity.Country;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.List;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -65,5 +73,15 @@ public class RunApp {
 
     System.out.println("## getDataSource: " + dataSource);
     return dataSource;
+  }
+
+  // add countries to DB
+  @Bean
+  CommandLineRunner addCountriesToDBTable(CountryDao countryDao)
+      throws IOException, URISyntaxException {
+
+    List<String> countries = Files.readAllLines(Paths.get(RunApp.class.getClassLoader()
+        .getResource("db.data/countries.txt").toURI()));
+    return args -> countries.forEach(name -> countryDao.save(new Country(name)));
   }
 }
