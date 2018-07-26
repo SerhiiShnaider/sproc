@@ -2,9 +2,15 @@
 
 <body>
 
+<div th:include="header::head"></div>
+
 <h1 th:text="${param.message[0]}">Error Message</h1>
 
 <a th:href="@{/registration.html}"
    th:text="#{label.form.loginSignUp}">signup</a>
+
+<div th:include="footer::foot"></div>
+
 </body>
+
 </html>

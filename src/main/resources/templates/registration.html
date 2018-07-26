@@ -1,11 +1,14 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
   <meta charset="UTF-8"/>
   <title>Registration</title>
   <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}"/>
 </head>
+
 <body>
+
 <div th:include="header::head"></div>
 
 <h1>Create a User:</h1>
@@ -27,15 +30,14 @@
          value="${_csrf.token}"/>
 </form>
 
-
-<div th:include="footer::foot"></div>
-<br/>
-
 <!-- Check if errorMessage is not null and not empty -->
-
+<br/>
 <div th:if="${errorMessage}" th:utext="${errorMessage}"
      style="color:red;font-style:italic;">
 </div>
 
+<div th:include="footer::foot"></div>
+
 </body>
+
 </html>
