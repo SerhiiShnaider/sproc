@@ -1,5 +1,6 @@
 package com.gmail.shnapi007.config;
 
+import com.gmail.shnapi007.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -25,7 +26,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Bean
   public PasswordEncoder passwordEncoder() {
-    return new BCryptPasswordEncoder();
+    return new BCryptPasswordEncoder(13);
   }
 
   @Bean
@@ -47,7 +48,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     inMemory()
         .withUser("adm")
         .password("adm")
-        .authorities("ROLE_ADMIN")
+        .authorities(Role.ROLE_ADMIN.toString())
         .and()
         .configure(auth);
 
